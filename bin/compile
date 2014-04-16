@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+function build-step (){ echo "-----> $@"; }
+function build-warn (){ echo " !     $@"; }
+function build-info (){ echo "       $@"; }
+
+# fail fast
+set -e
+
+if [ $(dpkg-query -W -f='${Status}' freetds-dev 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+  build-step "Installing FreeTDS"
+  apt-get -y update
+  apt-get -y install freetds-dev;
+fi
